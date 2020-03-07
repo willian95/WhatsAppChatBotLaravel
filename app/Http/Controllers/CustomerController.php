@@ -41,7 +41,7 @@ class CustomerController extends Controller
 
         }catch(\Exception $e){
 
-            return response()->json(["success" => false, "msg" => "Error en el servidor"]);
+            return response()->json(["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage()]);
 
         }
 
