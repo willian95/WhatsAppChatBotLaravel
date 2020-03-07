@@ -31,6 +31,7 @@ class CustomerController extends Controller
 
         try{
 
+            $order = null;
             $customer = Customer::where("phone", $request->phone)->first();
             
             if($customer){
