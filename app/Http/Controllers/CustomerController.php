@@ -26,4 +26,19 @@ class CustomerController extends Controller
 
     }
 
+    public function checkCustomer(Request $request){
+
+        try{
+
+            $customer = Customer::where("phone", $request->phone)->first();
+            return response()->json(["success" => true, "data" => $customer]);
+
+        }catch(\Exception $e){
+
+            return response()->json(["success" => false, "msg" => "Error en el servidor"]);
+
+        }
+
+    }
+
 }
