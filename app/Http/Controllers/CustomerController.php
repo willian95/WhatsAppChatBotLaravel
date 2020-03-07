@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomerStoreRequest;
 use App\Customer;
+use App\Oder;
 
 class CustomerController extends Controller
 {
@@ -31,7 +32,12 @@ class CustomerController extends Controller
         try{
 
             $customer = Customer::where("phone", $request->phone)->first();
-            return response()->json(["success" => true, "data" => $customer]);
+            
+            if($customer){
+                $order = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+            }
+
+            return response()->json(["success" => true, "customer" => $customer, "order" => $order]);
 
         }catch(\Exception $e){
 
