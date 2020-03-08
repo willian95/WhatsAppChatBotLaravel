@@ -45,7 +45,7 @@ class CustomerController extends Controller
                 $order->status_id = 1;
                 $order->save();
 
-                return response()->json(["success" => true, "statusOrder" => $order->status_id]);
+                return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Aún no nos conocemos. ¿Cuál es tu nombre?"]);
 
             }
 
@@ -70,7 +70,13 @@ class CustomerController extends Controller
             $previousOrder->update();
 
             $menu = $this->menu();
-            return ["success" => true, "statusOrder" => $previousOrder->status_id, "menu" => $menu, "name" => $customer->name];
+            $menuString = "";
+
+            foreach($menu as $m){
+                $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+            }
+
+            return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos las siguientes elecciones para ti: ".$menuString];
 
         }catch(\Exception $e){
 
