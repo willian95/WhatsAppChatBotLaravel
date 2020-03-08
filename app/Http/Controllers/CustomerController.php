@@ -155,7 +155,7 @@ class CustomerController extends Controller
 
         try{
 
-            if(!$this->checkOrder($order)){
+            if($this->checkOrder($order)){
 
                 $flag = true;
 
