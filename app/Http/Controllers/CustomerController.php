@@ -48,7 +48,9 @@ class CustomerController extends Controller
                     
                     $response = $this->takeOrder($request->phone, $request->body);
 
-                    if($response["success"] == true){
+                    return response()->json(["success" => true, "msg" => "status 3 ".$response]);
+
+                    /*if($response["success"] == true){
 
                         $customer = Customer::where('phone', $phone)->first();
 
@@ -68,7 +70,7 @@ class CustomerController extends Controller
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
-                    }
+                    }*/
 
                 }
 
@@ -153,7 +155,9 @@ class CustomerController extends Controller
 
     public function takeOrder($phone, $order){
 
-        try{
+        return $this->checkOrder($order);
+
+        /*try{
 
             if($this->checkOrder($order)){
 
@@ -190,7 +194,7 @@ class CustomerController extends Controller
 
         }catch(\Exception $e){
             return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage(), "line" => $e->getLine()];
-        }
+        }*/
 
     }
 
