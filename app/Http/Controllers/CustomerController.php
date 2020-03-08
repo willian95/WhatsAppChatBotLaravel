@@ -48,9 +48,7 @@ class CustomerController extends Controller
                     
                     $response = $this->takeOrder($request->phone, $request->body);
 
-                    return response()->json(["success" => true, "msg" => $response]);
-
-                    /*if($response["success"] == true){
+                    if($response["success"] == true){
 
                         $customer = Customer::where('phone', $request->phone)->first();
 
@@ -59,6 +57,13 @@ class CustomerController extends Controller
                         $previousOrder->update();
 
                         return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Ya tenemos tu orden"]);
+                    }
+                    else if(strpos($reponse["success"], "no available") > -1){
+
+                        $item_id = substr($reponse["success"], strpos($reponse["success"], "-"), strlen($response["success"]));
+                        return response()->json($item_id);
+                        //return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
+
                     }
                     else{
 
@@ -70,7 +75,7 @@ class CustomerController extends Controller
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
-                    }*/
+                    }
 
                 }
 
@@ -163,6 +168,7 @@ class CustomerController extends Controller
             if($this->checkOrder($order)){
 
                 $flag = true;
+                $noAvailableId = 0;
 
                 $order = str_replace(' ', '', $order);
                 $orderItems = explode(',', $order);
@@ -173,20 +179,17 @@ class CustomerController extends Controller
                     $item_id = $itemParts[0];
                     $item_amount = $itemParts[1]; 
                     
-                    
-
                     $isAvailable = Menu::where('id', $item_id)->first();
                     if($isAvailable == null){
                         $flag = false;
+                        $noAvailableId = $item_id;
                         break;
                     }
-
-                    return $isAvailable;
 
                 }
 
                 if($flag == false){
-                    return ["success" => "no available"];
+                    return ["success" => "no available-".$noAvailableId];
                 }
                 else{
 
