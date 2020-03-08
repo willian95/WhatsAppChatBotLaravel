@@ -24,6 +24,11 @@ class CustomerController extends Controller
                 
                 if($previousOrder == null && $customer->name != ""){
                     
+                    $order = new Order();
+                    $order->customer_id = $customer->id;
+                    $order->status_id = 1;
+                    $order->save();
+
                     $menu = $this->menu();
                     $menuString = "";
 
@@ -31,7 +36,7 @@ class CustomerController extends Controller
                         $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
                     }
 
-                    return response()->json(["success" => true, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString]);
+                    return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString]);
                 }
 
                 if($previousOrder->status_id == 1){
