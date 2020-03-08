@@ -49,7 +49,7 @@ class CustomerController extends Controller
             }else{
 
                 $customer = new Customer();
-                $customer->phone = $request->phone();
+                $customer->phone = $request->phone;
                 $customer->save();
 
                 $order = new Order();
