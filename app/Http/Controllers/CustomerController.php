@@ -14,8 +14,8 @@ class CustomerController extends Controller
 
         try{
 
-            $customer = Customer::where('phone', $request->phone)->first();
-            $customer->name = $request->name;
+            $customer = Customer::where('phone', $phone)->first();
+            $customer->name = $name;
             $customer->update();
 
             return ["success" => true];
