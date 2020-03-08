@@ -173,7 +173,7 @@ class CustomerController extends Controller
                     $item_id = $itemParts[0];
                     $item_amount = $itemParts[1]; 
                     
-                    return $item_id;
+                    
 
                     $isAvailable = Menu::where('id', $item_id)->first();
                     if($isAvailable == null){
@@ -181,10 +181,12 @@ class CustomerController extends Controller
                         break;
                     }
 
+                    return $isAvailable;
+
                 }
 
                 if($flag == false){
-                    return ["success" => "warn"];
+                    return ["success" => "no available"];
                 }
                 else{
 
