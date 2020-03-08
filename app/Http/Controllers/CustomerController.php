@@ -45,7 +45,7 @@ class CustomerController extends Controller
                 $order->status_id = 1;
                 $order->save();
 
-                return response()->json(["success" => true, "statusOrder" => $order->id]);
+                return response()->json(["success" => true, "statusOrder" => $order->status_id]);
 
             }
 
