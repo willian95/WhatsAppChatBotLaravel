@@ -167,11 +167,11 @@ class CustomerController extends Controller
                 $order = str_replace(' ', '', $order);
                 $orderItems = explode(',', $order);
 
-                return $orderItems;
-
                 foreach($orderItems as $item){
 
-                    $itemParts = explode('-', $item);
+                    return $item;
+
+                    $itemParts = explode('-', $item);   
                     $item_id = $itemParts[0];
                     $item_amount = $itemParts[1]; 
                     
