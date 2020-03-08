@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CustomerStoreRequest;
 use App\Customer;
 use App\Order;
+use App\Menu;
 
 class CustomerController extends Controller
 {
@@ -24,6 +25,11 @@ class CustomerController extends Controller
                 if($previousOrder->status_id == 1){
                     $reponse = $this->update($request->phone, $request->name);
                     return response()->json($reponse);
+                }
+
+                if($previousOrder == null && $customer->name != ""){
+                    $menu = $this->menu();
+                    return response()->json(["success" => true, "menu" => $menu]);
                 }
 
                 return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id]);
@@ -63,9 +69,9 @@ class CustomerController extends Controller
             $previousOrder->status_id = 2;
             $previousOrder->update();
 
+            $menu = $this->menu;
 
-
-            return ["success" => true, "statusId" => $previousOrder->status_id];
+            return ["success" => true, "statusId" => $previousOrder->status_id, "menu" => $menu];
 
         }catch(\Exception $e){
 
@@ -75,9 +81,10 @@ class CustomerController extends Controller
 
     }
 
-    public function sendMenu(){
+    public function menu(){
 
-        
+        $menu = Menu::all();
+        return $menu;
 
     }
 
