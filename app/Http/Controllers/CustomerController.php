@@ -23,7 +23,7 @@ class CustomerController extends Controller
                 $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
                 
                 if($previousOrder->status_id == 1){
-                    $reponse = $this->update($request->phone, $request->name);
+                    $reponse = $this->update($request->phone, $request->body);
                     return response()->json($reponse);
                 }
 
