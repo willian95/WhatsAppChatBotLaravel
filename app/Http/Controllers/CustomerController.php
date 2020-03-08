@@ -52,7 +52,7 @@ class CustomerController extends Controller
 
                     if($response["success"] == true){
 
-                        $customer = Customer::where('phone', $phone)->first();
+                        $customer = Customer::where('phone', $request->phone)->first();
 
                         $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 3;
