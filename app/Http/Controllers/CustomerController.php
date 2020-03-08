@@ -48,9 +48,9 @@ class CustomerController extends Controller
                     
                     $response = $this->takeOrder($request->phone, $request->body);
 
-                    //return response()->json(["success" => true, "msg" => "status 3 ".$response]);
+                    return response()->json(["success" => true, "msg" => $response]);
 
-                    if($response["success"] == true){
+                    /*if($response["success"] == true){
 
                         $customer = Customer::where('phone', $request->phone)->first();
 
@@ -70,7 +70,7 @@ class CustomerController extends Controller
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
-                    }
+                    }*/
 
                 }
 
@@ -145,6 +145,7 @@ class CustomerController extends Controller
 
             }else{
                 $flag = false;
+                break;
             }
 
         }
@@ -165,6 +166,8 @@ class CustomerController extends Controller
 
                 $order = str_replace(' ', '', $order);
                 $orderItems = explode(',', $order);
+
+                return $orderItems;
 
                 foreach($orderItems as $item){
 
