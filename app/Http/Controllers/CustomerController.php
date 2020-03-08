@@ -9,24 +9,6 @@ use App\Order;
 
 class CustomerController extends Controller
 {
-    
-    public function update($phone, $name){
-
-        try{
-
-            $customer = Customer::where('phone', $phone)->first();
-            $customer->name = $name;
-            $customer->update();
-
-            return ["success" => true];
-
-        }catch(\Exception $e){
-
-            return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage()];
-
-        }
-
-    }
 
     public function checkCustomer(Request $request){
 
@@ -40,7 +22,7 @@ class CustomerController extends Controller
                 $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
                 
                 if($previousOrder->status_id == 1){
-                    $reponse = $this->update($phone, $name);
+                    $reponse = $this->update($request->phone, $request->name);
                     return response()->json($reponse);
                 }
 
@@ -66,6 +48,36 @@ class CustomerController extends Controller
             return response()->json(["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage()]);
 
         }
+
+    }
+
+    public function update($phone, $name){
+
+        try{
+
+            $customer = Customer::where('phone', $phone)->first();
+            $customer->name = $name;
+            $customer->update();
+
+            $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+            $previousOrder->status_id = 2;
+            $previousOrder->update();
+
+
+
+            return ["success" => true, "statusId" => $previousOrder->status_id];
+
+        }catch(\Exception $e){
+
+            return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage()];
+
+        }
+
+    }
+
+    public function sendMenu(){
+
+        
 
     }
 
