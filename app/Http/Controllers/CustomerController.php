@@ -69,8 +69,7 @@ class CustomerController extends Controller
             $previousOrder->status_id = 2;
             $previousOrder->update();
 
-            $menu = $this->menu;
-
+            $menu = $this->menu();
             return ["success" => true, "statusId" => $previousOrder->status_id, "menu" => $menu];
 
         }catch(\Exception $e){
