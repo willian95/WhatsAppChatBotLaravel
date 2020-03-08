@@ -28,8 +28,15 @@ class CustomerController extends Controller
                 }
 
                 if($previousOrder == null && $customer->name != ""){
+                    
                     $menu = $this->menu();
-                    return response()->json(["success" => true, "menu" => $menu]);
+                    $menuString = "";
+
+                    foreach($menu as $m){
+                        $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+                    }
+
+                    return response()->json(["success" => true, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString]);
                 }
 
                 return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id]);
@@ -76,7 +83,7 @@ class CustomerController extends Controller
                 $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
             }
 
-            return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos las siguientes elecciones para ti: ".$menuString];
+            return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos las siguientes elecciones para ti: \n".$menuString];
 
         }catch(\Exception $e){
 
