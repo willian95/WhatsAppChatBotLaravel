@@ -22,11 +22,6 @@ class CustomerController extends Controller
 
                 $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
                 
-                if($previousOrder->status_id == 1){
-                    $reponse = $this->update($request->phone, $request->body);
-                    return response()->json($reponse);
-                }
-
                 if($previousOrder == null && $customer->name != ""){
                     
                     $menu = $this->menu();
@@ -37,6 +32,11 @@ class CustomerController extends Controller
                     }
 
                     return response()->json(["success" => true, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString]);
+                }
+
+                if($previousOrder->status_id == 1){
+                    $reponse = $this->update($request->phone, $request->body);
+                    return response()->json($reponse);
                 }
 
                 return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id]);
