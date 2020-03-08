@@ -10,18 +10,19 @@ use App\Oder;
 class CustomerController extends Controller
 {
     
-    public function store(CustomerStoreRequest $request){
+    public function update($phone, $name){
 
         try{
 
-            $customer = new Customer;
+            $customer = Customer::where('phone', $request->phone)->first();
             $customer->name = $request->name;
-            $customer->phone = $request->phone;
-            $customer->save();
+            $customer->update();
 
-            return response()->json(["success" => true]);
+            return ["success" => true];
 
         }catch(\Exception $e){
+
+            return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage()];
 
         }
 
@@ -31,14 +32,34 @@ class CustomerController extends Controller
 
         try{
 
-            $order = null;
+            $previousOrder = null;
             $customer = Customer::where("phone", $request->phone)->first();
             
             if($customer){
-                $order = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
-            }
 
-            return response()->json(["success" => true, "customer" => $customer, "order" => $order]);
+                $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                
+                if($previousOrder->status_id == 1){
+                    $reponse = $this->update($phone, $name);
+                    return response()->json($reponse);
+                }
+
+                return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id]);
+            
+            }else{
+
+                $customer = new Customer();
+                $customer->phone = $request->phone();
+                $customer->save();
+
+                $order = new Order();
+                $order->customer_id = $customer->id;
+                $order->status_id = 1;
+                $order->save();
+
+                return response()->json(["success" => true, "statusOrder" => $order->id]);
+
+            }
 
         }catch(\Exception $e){
 
