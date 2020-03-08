@@ -36,12 +36,40 @@ class CustomerController extends Controller
                         $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
                     }
 
-                    return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString]);
+                    return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad,..."]);
                 }
 
                 if($previousOrder->status_id == 1){
                     $reponse = $this->update($request->phone, $request->body);
                     return response()->json($reponse);
+                }
+
+                if($previousOrder->status_id == 2){
+                    
+                    $response = $this->takeOrder($request->phone, $request->body);
+
+                    if($response["success"] == true){
+
+                        $customer = Customer::where('phone', $phone)->first();
+
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                        $previousOrder->status_id = 3;
+                        $previousOrder->update();
+
+                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Ya tenemos tu orden"]);
+                    }
+                    else{
+
+                        $menu = $this->menu();
+                        $menuString = "";
+
+                        foreach($menu as $m){
+                            $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+                        }
+
+                        return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
+                    }
+
                 }
 
                 return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id]);
@@ -102,6 +130,67 @@ class CustomerController extends Controller
 
         $menu = Menu::all();
         return $menu;
+
+    }
+
+    public function checkOrder($order){
+
+        $flag = true;
+
+        for($i=0;$i<strlen($cadena);$i++){
+
+            if(is_numeric($cadena[$i]) || $cadena[$i] == "," || $cadena[$i] == "-"){
+
+            }else{
+                $flag = false;
+            }
+
+        }
+
+        return $flag;
+
+    }
+
+    public function takeOrder($phone, $order){
+
+        try{
+
+            if(!$this->checkOrder($order)){
+
+                $flag = true;
+
+                $order = str_replace(' ', '', $order);
+                $orderItems = explode(',', $order);
+
+                foreach($orderItems as $item){
+
+                    $itemParts = explode('-', $item);
+                    $item_id = $itemParts[0];
+                    $item_amount = $itemParts[1]; 
+                    
+                    $isAvailable = Menu::where('id', $item_id)->first();
+                    if($isAvailable == null){
+                        $flag = false;
+                        break;
+                    }
+
+                }
+
+                if($flag == false){
+                    return ["success" => "warn"];
+                }
+                else{
+
+                    return ["success" => true];   
+                }
+
+            }else{
+                return ["success" => "warn"];
+            }
+
+        }catch(\Exception $e){
+            return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage(), "line" => $e->getLine()];
+        }
 
     }
 
