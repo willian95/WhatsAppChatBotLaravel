@@ -169,12 +169,12 @@ class CustomerController extends Controller
 
                 foreach($orderItems as $item){
 
-                    return $item;
-
                     $itemParts = explode('-', $item);   
                     $item_id = $itemParts[0];
                     $item_amount = $itemParts[1]; 
                     
+                    return $item_id;
+
                     $isAvailable = Menu::where('id', $item_id)->first();
                     if($isAvailable == null){
                         $flag = false;
