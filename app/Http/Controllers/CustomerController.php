@@ -60,7 +60,7 @@ class CustomerController extends Controller
 
                         return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Ya tenemos tu orden"]);
                     }
-                    else if(strpos($reponse["success"], "no available") > -1){
+                    else if(strpos($response["success"], "no available") > -1){
 
                         $item_id = substr($reponse["success"], strpos($reponse["success"], "-"), strlen($response["success"]));
                         return response()->json($item_id);
