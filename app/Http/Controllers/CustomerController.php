@@ -144,6 +144,7 @@ class CustomerController extends Controller
     public function checkOrder($order){
 
         $flag = true;
+        $order = str_replace(' ', '', $order);
 
         for($i=0;$i<strlen($order);$i++){
 
