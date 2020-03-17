@@ -47,6 +47,7 @@ class CustomerController extends Controller
                 if($previousOrder->status_id == 2){
                     
                     $response = $this->takeOrder($request->phone, $request->body);
+                    return response()->json($response);
 
                     if($response["success"] == true){
 
@@ -161,7 +162,7 @@ class CustomerController extends Controller
 
     public function takeOrder($phone, $order){
 
-        //return $this->checkOrder($order);
+        return $this->checkOrder($order);
 
         try{
 
