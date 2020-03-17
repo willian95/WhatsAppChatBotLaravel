@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomerStoreRequest;
 use App\Customer;
 use App\Order;
 use App\Menu;
+
 
 class CustomerController extends Controller
 {
@@ -184,6 +186,9 @@ class CustomerController extends Controller
                         $noAvailableId = $item_id;
                         break;
                     }
+
+                    Log::info('Pay attention to this: '.$itemParts[0]);
+                    log::info("info: ".$isAvailable);
 
                 }
 
