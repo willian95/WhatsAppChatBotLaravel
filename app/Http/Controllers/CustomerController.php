@@ -164,6 +164,8 @@ class CustomerController extends Controller
 
     public function takeOrder($phone, $order){
 
+        Log::info($order);
+
         try{
 
             if($this->checkOrder($order)){
