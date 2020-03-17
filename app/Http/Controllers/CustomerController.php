@@ -174,6 +174,8 @@ class CustomerController extends Controller
                 $order = str_replace(' ', '', $order);
                 $orderItems = explode(',', $order);
 
+                Log::info('orderItems: '.$orderItems);
+
                 foreach($orderItems as $item){
 
                     $itemParts = explode('-', $item);   
