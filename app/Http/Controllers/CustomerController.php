@@ -28,7 +28,7 @@ class CustomerController extends Controller
                     
                     $order = new Order();
                     $order->customer_id = $customer->id;
-                    $order->status_id = 1;
+                    $order->status_id = 2;
                     $order->save();
 
                     $menu = $this->menu();
