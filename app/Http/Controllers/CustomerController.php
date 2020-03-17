@@ -164,11 +164,11 @@ class CustomerController extends Controller
 
     public function takeOrder($phone, $order){
 
-        Log::info($order);
-
         try{
 
             if($this->checkOrder($order)){
+
+                Log::info("entre");
 
                 $flag = true;
                 $noAvailableId = 0;
@@ -205,6 +205,7 @@ class CustomerController extends Controller
                 }
 
             }else{
+                Log::info("no entro");
                 return ["success" => "warn"];
             }
 
