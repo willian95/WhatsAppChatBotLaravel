@@ -49,8 +49,16 @@ class CustomerController extends Controller
                 if($previousOrder->status_id == 2){
                     
                     $response = $this->takeOrder($request->phone, $request->body);
-                    return response()->json(["repsonse" => $response["success"]]);
-                    if($response["success"] == true){
+                    return response()->json(["repsonse" => strpos($response["success"], "no available")]);
+                   
+                    if(strpos($response["success"], "no available") > -1){
+
+                        $item_id = substr($reponse["success"], strpos($reponse["success"], "-"), strlen($response["success"]));
+                        return response()->json($item_id);
+                        //return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
+
+                    }
+                    else if($response["success"] == true){
 
                         $customer = Customer::where('phone', $request->phone)->first();
 
@@ -59,13 +67,6 @@ class CustomerController extends Controller
                         $previousOrder->update();
 
                         return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Ya tenemos tu orden"]);
-                    }
-                    else if(strpos($response["success"], "no available") > -1){
-
-                        $item_id = substr($reponse["success"], strpos($reponse["success"], "-"), strlen($response["success"]));
-                        return response()->json($item_id);
-                        //return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
-
                     }
                     else{
 
