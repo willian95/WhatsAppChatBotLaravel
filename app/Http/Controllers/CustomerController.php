@@ -35,7 +35,7 @@ class CustomerController extends Controller
                     $menuString = "";
 
                     foreach($menu as $m){
-                        $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+                        $menuString .= $m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
                     }
 
                     return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad,..."]);
