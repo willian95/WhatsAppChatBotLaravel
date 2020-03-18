@@ -178,7 +178,6 @@ class CustomerController extends Controller
                 $orderItems = explode(',', $order);
 
                 Log::info('order: '.$order);
-                Log::info('orderItems: '.$orderItems);
 
                 foreach($orderItems as $item){
 
