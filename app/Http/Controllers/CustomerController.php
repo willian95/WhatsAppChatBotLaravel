@@ -49,7 +49,7 @@ class CustomerController extends Controller
                 if($previousOrder->status_id == 2){
                     
                     $response = $this->takeOrder($request->phone, $request->body);
-                    return response()->json(["repsonse" => $response]);
+                    return response()->json(["repsonse" => $response["success"]]);
                     if($response["success"] == true){
 
                         $customer = Customer::where('phone', $request->phone)->first();
