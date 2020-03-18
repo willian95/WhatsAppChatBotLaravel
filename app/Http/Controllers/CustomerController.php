@@ -52,9 +52,9 @@ class CustomerController extends Controller
                    
                     if(strpos($response["success"], "no available") > -1){
 
-                        $item_id = substr($response["success"], strpos($response["success"], "-"), strlen($response["success"]));
-                        return response()->json($item_id);
-                        //return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
+                        $item_id = substr($response["success"], strpos($response["success"], "-") + 1, strlen($response["success"]));
+                        //return response()->json($item_id);
+                        return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
 
                     }
                     else if($response["success"] == true){
