@@ -8,7 +8,7 @@ use App\Http\Requests\CustomerStoreRequest;
 use App\Customer;
 use App\Order;
 use App\Menu;
-
+use Storage;
 
 class CustomerController extends Controller
 {
@@ -169,7 +169,7 @@ class CustomerController extends Controller
             
             if($this->checkOrder($order)){
 
-                Log::info("entre takeOrder");
+                Storage::append('file.txt', 'entre takeOrder');
 
                 $flag = true;
                 $noAvailableId = 0;
@@ -177,7 +177,7 @@ class CustomerController extends Controller
                 $order = str_replace(' ', '', $order);
                 $orderItems = explode(',', $order);
 
-                Log::info('order: '.$order);
+                Storage::append('file.txt', 'order: '.$order);
 
                 foreach($orderItems as $item){
 
@@ -192,21 +192,22 @@ class CustomerController extends Controller
                         break;
                     }
 
-                    Log::info('Pay attention to this: '.$itemParts[0]);
-                    log::info("info: ".$isAvailable);
+                    Storage::append('file.txt', 'Pay attention to this: '.$itemParts[0]);
+                    Storage::append('file.txt',"info: ".$isAvailable);
 
                 }
 
                 if($flag == false){
+                    Storage::append('file.txt', "No available");
                     return ["success" => "no available-".$noAvailableId];
                 }
                 else{
-
+                    Storage::append('file.txt', "Exito");
                     return ["success" => true];   
                 }
 
             }else{
-                Log::info("no entro");
+                Storage::append('file.txt',"no entro");
                 return ["success" => "warn"];
             }
 
