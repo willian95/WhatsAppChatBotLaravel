@@ -165,7 +165,7 @@ class CustomerController extends Controller
 
                         }
 
-                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Es esta su orden: "."\n".$message."\n"."Total a pagar: ".$total."$"]);
+                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Esta es su orden: "."\n".$message."\n"."Total a pagar: ".$total."$". "\n"."Estas son nuestras cuentas y pago móvil:"."\n"."Banco de Venezuela: 123123123"."\n"."Favor enviar mensaje o captura de pantalla con número de referencia"]);
 
                     }else{
 
