@@ -71,6 +71,8 @@ class CustomerController extends Controller
                         $previousOrder->status_id = 3;
                         $previousOrder->update();
 
+                        Log::info($previousOrder->order);
+
                         $message = "";
                         $orderExploded = explode(",", $previousOrder->order);
                         
