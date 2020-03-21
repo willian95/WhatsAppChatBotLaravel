@@ -52,7 +52,7 @@ class CustomerController extends Controller
 
                     $response = $this->takeOrder($request->phone, $request->body);
 
-                    Log::info("response: ".$reponse["success"]);
+                    Log::info("response: ".$response);
                    
                     if(strpos($response["success"], "no available") > -1){
 
