@@ -48,6 +48,8 @@ class CustomerController extends Controller
 
                 if($previousOrder->status_id == 2){
                     
+                    Log::info("status 2");
+
                     $response = $this->takeOrder($request->phone, $request->body);
 
                     Log::info("response: ".$reponse["success"]);
