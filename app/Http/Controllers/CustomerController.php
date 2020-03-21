@@ -145,6 +145,7 @@ class CustomerController extends Controller
                         $previousOrder->status_id = 5;
                         $previousOrder->update();
 
+                        $message="";
                         $orderExploded = explode(",", $previousOrder->order);
                         $total = 0;
                         
