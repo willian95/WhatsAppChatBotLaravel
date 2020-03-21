@@ -21,7 +21,7 @@ class CustomerController extends Controller
             
             if($customer){
 
-                $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "7")->orderBy('id', 'desc')->first();
                 
                 if($previousOrder == null && $customer->name != ""){
                     
@@ -65,9 +65,9 @@ class CustomerController extends Controller
                     }
                     else if($response["success"] == "true"){
 
-                        $customer = Customer::where('phone', $request->phone)->first();
+                        //$customer = Customer::where('phone', $request->phone)->first();
 
-                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 3;
                         $previousOrder->update();
 
@@ -106,7 +106,7 @@ class CustomerController extends Controller
 
                     if($request->body == "1"){
 
-                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 4;
                         $previousOrder->update();
 
@@ -114,7 +114,7 @@ class CustomerController extends Controller
 
                     }else if($request->body == "2"){
 
-                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 2;
                         $previousOrder->order = "";
                         $previousOrder->update();
@@ -141,7 +141,7 @@ class CustomerController extends Controller
                     Log::info("lng: ".$request->lon);
                     if($request->lat != "undefined" && $request->lng != "undefined"){
                         
-                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->lat = $request->lat;
                         $previousOrder->lon = $request->lng;
                         $previousOrder->status_id = 5;
@@ -165,7 +165,7 @@ class CustomerController extends Controller
 
                         }
 
-                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Esta es su orden: "."\n".$message."\n"."Total a pagar: ".$total."$". "\n"."Estas son nuestras cuentas y pago móvil:"."\n"."Banco de Venezuela: 123123123"."\n"."Favor enviar mensaje o captura de pantalla con número de referencia"]);
+                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Esta es su orden: "."\n".$message."\n"."Total a pagar: ".$total."$". "\n"."Estas son nuestras cuentas y pago móvil:"."\n"."Banco de Venezuela: 123123123"."\n"."Favor enviar mensaje con número de referencia y banco destino."."\n"."Capturas de pantallas no estás permitidas"]);
 
                     }else{
 
@@ -173,6 +173,21 @@ class CustomerController extends Controller
 
                     }
                     
+
+                }else if($previousOrder->status_id == 5){
+
+                    if($request->tyoe == "image"){
+                        return response()->json(["success" => true, "msg" => "Capturas de pantallas no están permitidas."."\n"."Enviar mensaje con numero de referencia y banco de destino"]);
+                    }else{
+
+                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        $previousOrder->payment_reference = $request->body;
+                        $previousOrder->status_id = 6;
+                        $previousOrder->update();
+
+                        return response()->json(["success" => true, "msg" => "Nuestros administradores están verificando el pago, en breve le daremos respuesta"]);
+
+                    }
 
                 }
 
@@ -209,7 +224,7 @@ class CustomerController extends Controller
             $customer->name = $name;
             $customer->update();
 
-            $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+            $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "7")->orderBy('id', 'desc')->first();
             $previousOrder->status_id = 2;
             $previousOrder->update();
 
@@ -217,7 +232,7 @@ class CustomerController extends Controller
             $menuString = "";
 
             foreach($menu as $m){
-                $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+                $menuString .= $m->id."-".$m->name."\n".$m->description."\n"."precio: ".$m->price;
             }
 
             return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Por ejemplo 1-2, 3-1, 4-1"];
@@ -299,7 +314,7 @@ class CustomerController extends Controller
                 else{
 
                     $customer = Customer::where('phone', $phone)->first();
-                    $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                    $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "7")->orderBy('id', 'desc')->first();
                     $previousOrder->order = str_replace(' ', '', $order);
                     $previousOrder->update();
 
