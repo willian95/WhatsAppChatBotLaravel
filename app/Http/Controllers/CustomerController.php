@@ -215,6 +215,7 @@ class CustomerController extends Controller
             }
 
         }catch(\Exception $e){
+            Log::info("error");
             return ["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage(), "line" => $e->getLine()];
         }
 
