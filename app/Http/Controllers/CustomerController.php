@@ -34,7 +34,7 @@ class CustomerController extends Controller
                     $menuString = "";
 
                     foreach($menu as $m){
-                        $menuString .= $m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
+                        $menuString .= "opción: ".$m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
                     }
 
                     return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ..."]);
@@ -94,7 +94,7 @@ class CustomerController extends Controller
                         $menuString = "";
 
                         foreach($menu as $m){
-                            $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
+                            $menuString .= "opción ".$m->id."-".$m->name."\n".$m->description."\n\n";
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ... \n".$menuString]);
@@ -123,7 +123,7 @@ class CustomerController extends Controller
                         $menuString = "";
 
                         foreach($menu as $m){
-                            $menuString .= $m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
+                            $menuString .= "opción ".$m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ..."]);
@@ -232,7 +232,7 @@ class CustomerController extends Controller
             $menuString = "";
 
             foreach($menu as $m){
-                $menuString .= $m->id."-".$m->name."\n".$m->description."\n"."precio: ".$m->price."\n"."\n";
+                $menuString .= "opción ".$m->id." - ".$m->name."\n".$m->description."\n"."precio: ".$m->price."\n"."\n";
             }
 
             return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Por ejemplo 1-2, 3-1, 4-1"];
