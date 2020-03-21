@@ -139,7 +139,7 @@ class CustomerController extends Controller
                     Log::info("status: ".$previousOrder->status_id);
                     Log::info("lat: ".$request->lat);
                     Log::info("lng: ".$request->lon);
-                    if($request->has("lat") && $request->has("lng")){
+                    if($request->lat != "undefined" && $request->lng != "undefined"){
                         
                         $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->lat = $request->lat;
