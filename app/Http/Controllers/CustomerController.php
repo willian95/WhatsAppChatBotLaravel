@@ -46,8 +46,6 @@ class CustomerController extends Controller
                 }
 
                 else if($previousOrder->status_id == 2){
-                    
-                    Log::info("status 2");
 
                     $response = $this->takeOrder($request->phone, $request->body);
                    
@@ -84,7 +82,7 @@ class CustomerController extends Controller
                             
                             $option = Menu::where('id', $item_id)->first();  
                             
-                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"; 
+                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"."precio unitario: ".$option->price."\n"."subtotal: ".$option->price * $item_amount."\n\n"; 
 
                         }
 
@@ -112,7 +110,7 @@ class CustomerController extends Controller
                         $previousOrder->status_id = 4;
                         $previousOrder->update();
 
-                        return response()->json(["success" => true, "statusOrder" => 4, "msg" => "Excelente, envíanos tu ubicación para hacer el despacho"]);
+                        return response()->json(["success" => true, "statusOrder" => 4, "msg" => "Excelente, envíanos tu ubicación por google maps para entregarte precio final y hacer el envío"]);
 
                     }else if($request->body == "2"){
 
