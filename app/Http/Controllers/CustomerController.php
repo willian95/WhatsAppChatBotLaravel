@@ -9,7 +9,6 @@ use App\Customer;
 use App\Order;
 use App\Menu;
 
-
 class CustomerController extends Controller
 {
 
@@ -22,7 +21,7 @@ class CustomerController extends Controller
             
             if($customer){
 
-                $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                 
                 if($previousOrder == null && $customer->name != ""){
                     
@@ -38,7 +37,7 @@ class CustomerController extends Controller
                         $menuString .= $m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
                     }
 
-                    return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad,..."]);
+                    return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ..."]);
                 }
 
                 if($previousOrder->status_id == 1){
@@ -74,7 +73,22 @@ class CustomerController extends Controller
                         $previousOrder->status_id = 3;
                         $previousOrder->update();
 
-                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Ya tenemos tu orden"]);
+                        $message = "";
+                        $orderExploded = explode(",", $previousOrder->order);
+                        
+                        foreach($orderExploded as $exploded){
+
+                            $itemParts = explode('-', $exploded);   
+                            $item_id = $itemParts[0];
+                            $item_amount = $itemParts[1]; 
+                            
+                            $option = Menu::where('id', $item_id)->first();  
+                            
+                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"; 
+
+                        }
+
+                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Es esta su orden: "."\n".$message."\n"."Si es correcta marque 1, sino, marque 2"]);
                     }
                     else{
 
@@ -85,7 +99,7 @@ class CustomerController extends Controller
                             $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
                         }
 
-                        return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
+                        return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ... \n".$menuString]);
                     
                     }
 
@@ -212,6 +226,11 @@ class CustomerController extends Controller
                     return ["success" => "no available-".$noAvailableId];
                 }
                 else{
+
+                    $customer = Customer::where('phone', $phone)->first();
+                    $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                    $previousOrder->order = str_replace(' ', '', $order);
+                    $previousOrder->update();
 
                     return ["success" => "true"];   
                 }
