@@ -40,12 +40,12 @@ class CustomerController extends Controller
                     return response()->json(["success" => true, "statusOrder" => $order->status_id, "msg" => "Hola de nuevo ".$customer->name.". Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ..."]);
                 }
 
-                if($previousOrder->status_id == 1){
+                else if($previousOrder->status_id == 1){
                     $reponse = $this->update($request->phone, $request->body);
                     return response()->json($reponse);
                 }
 
-                if($previousOrder->status_id == 2){
+                else if($previousOrder->status_id == 2){
                     
                     Log::info("status 2");
 
@@ -69,7 +69,7 @@ class CustomerController extends Controller
 
                         $customer = Customer::where('phone', $request->phone)->first();
 
-                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 3;
                         $previousOrder->update();
 
@@ -101,6 +101,39 @@ class CustomerController extends Controller
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ... \n".$menuString]);
                     
+                    }
+
+                }
+                else if($previousOrder->status_id == 4){
+
+                    if($request->body == 1){
+
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        $previousOrder->status_id = 4;
+                        $previousOrder->update();
+
+                        return response()->json(["success" => true, "statusOrder" => 4, "msg" => "Excelente, envíanos tu ubicación para hacer el despacho"]);
+
+                    }else if($request->body == 2){
+
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        $previousOrder->status_id = 2;
+                        $previousOrder->order = "";
+                        $previousOrder->update();
+
+                        $menu = $this->menu();
+                        $menuString = "";
+
+                        foreach($menu as $m){
+                            $menuString .= $m->id."-".$m->name."\n"."Precio: ".$m->price." $"."\n".$m->description."\n\n";
+                        }
+
+                        return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos estas opciones para ti: \n".$menuString."\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Las 'comas' y 'guiones' son importantes. Por ejemplo: 1-2, 2-3, 3-1, ..."]);
+
+                    }else{
+
+                        return response()->json(["success" => true, "statusOrder" => 3, "msg" => "Por favor, seleccione entre la opción 1 y 2"]);
+
                     }
 
                 }
@@ -138,7 +171,7 @@ class CustomerController extends Controller
             $customer->name = $name;
             $customer->update();
 
-            $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+            $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
             $previousOrder->status_id = 2;
             $previousOrder->update();
 
@@ -228,7 +261,7 @@ class CustomerController extends Controller
                 else{
 
                     $customer = Customer::where('phone', $phone)->first();
-                    $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "5")->orderBy('id', 'desc')->first();
+                    $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                     $previousOrder->order = str_replace(' ', '', $order);
                     $previousOrder->update();
 
