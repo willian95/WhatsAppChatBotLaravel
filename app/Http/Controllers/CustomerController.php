@@ -51,8 +51,6 @@ class CustomerController extends Controller
                     Log::info("status 2");
 
                     $response = $this->takeOrder($request->phone, $request->body);
-
-                    Log::info("response: ".$response);
                    
                     if(strpos($response["success"], "no available") > -1){
 
@@ -104,7 +102,7 @@ class CustomerController extends Controller
             }
 
         }catch(\Exception $e){
-
+            Log::info("global error");
             return response()->json(["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage(), "line" => $e->getLine()]);
 
         }
