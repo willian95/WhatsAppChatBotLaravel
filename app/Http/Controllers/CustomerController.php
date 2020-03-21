@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
                         //$customer = Customer::where('phone', $request->phone)->first();
 
-                        //$previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "7")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 3;
                         $previousOrder->update();
 
