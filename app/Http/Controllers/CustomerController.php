@@ -104,7 +104,7 @@ class CustomerController extends Controller
                     }
 
                 }
-                else if($previousOrder->status_id == 4){
+                else if($previousOrder->status_id == 3){
 
                     if($request->body == "1"){
 
