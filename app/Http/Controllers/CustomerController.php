@@ -191,7 +191,7 @@ class CustomerController extends Controller
             }
 
         }catch(\Exception $e){
-            Log::info("global error");
+            Log::info("global error: ". $e->getMessage()." line: ".$e->getLine());
             return response()->json(["success" => false, "msg" => "Error en el servidor", "error" => $e->getMessage(), "line" => $e->getLine()]);
 
         }
