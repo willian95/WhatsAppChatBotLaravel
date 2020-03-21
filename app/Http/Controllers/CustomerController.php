@@ -106,7 +106,7 @@ class CustomerController extends Controller
                 }
                 else if($previousOrder->status_id == 4){
 
-                    if($request->body == 1){
+                    if($request->body == "1"){
 
                         $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 4;
@@ -114,7 +114,7 @@ class CustomerController extends Controller
 
                         return response()->json(["success" => true, "statusOrder" => 4, "msg" => "Excelente, envíanos tu ubicación para hacer el despacho"]);
 
-                    }else if($request->body == 2){
+                    }else if($request->body == "2"){
 
                         $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
                         $previousOrder->status_id = 2;
