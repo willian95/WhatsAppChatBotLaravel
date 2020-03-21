@@ -57,7 +57,7 @@ class CustomerController extends Controller
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "La opción ".$item_id." no existe, vuelva a verificar"]);
 
                     }
-                    else if($response["success"] == true){
+                    else if($response["success"] == "true"){
 
                         $customer = Customer::where('phone', $request->phone)->first();
 
@@ -77,6 +77,7 @@ class CustomerController extends Controller
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => "Tenemos un problema con su orden, no está bien realizada. Recuerde que debe ser de la siguiente forma: número-cantidad,número-cantidad,... \n\n".$menuString]);
+                    
                     }
 
                 }
@@ -201,7 +202,7 @@ class CustomerController extends Controller
                 }
                 else{
 
-                    return ["success" => true];   
+                    return ["success" => "true"];   
                 }
 
             }else{
