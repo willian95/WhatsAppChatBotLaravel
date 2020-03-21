@@ -166,9 +166,10 @@ class CustomerController extends Controller
 
         try{
 
+            
             if($this->checkOrder($order)){
 
-                Log::info("entre");
+                Log::info("entre takeOrder");
 
                 $flag = true;
                 $noAvailableId = 0;
