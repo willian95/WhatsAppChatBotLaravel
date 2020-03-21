@@ -82,7 +82,7 @@ class CustomerController extends Controller
                             
                             $option = Menu::where('id', $item_id)->first();  
                             
-                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"."precio unitario: ".$option->price."\n"."subtotal: ".$option->price * $item_amount."\n\n"; 
+                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"."precio unitario: ".$option->price."$"."\n"."subtotal: ".$option->price * $item_amount."$"."\n\n"; 
 
                         }
 
@@ -133,6 +133,43 @@ class CustomerController extends Controller
                         return response()->json(["success" => true, "statusOrder" => 3, "msg" => "Por favor, seleccione entre la opción 1 y 2"]);
 
                     }
+
+                }
+                else if($previousOrder->status_id == 4){
+
+                    if($request->lat != null && $request->lng != null && $request->lat != "" && $request->lng != ""){
+                        
+                        $previousOrder = Order::where('customer_id', $customer->id)->where('status_id', '<', "6")->orderBy('id', 'desc')->first();
+                        $previousOrder->lat = $request->lat;
+                        $previousOrder->lon = $request->lng;
+                        $previousOrder->status_id = 5;
+                        $previousOrder->update();
+
+                        $orderExploded = explode(",", $previousOrder->order);
+                        $total = 0;
+                        
+                        foreach($orderExploded as $exploded){
+
+                            $itemParts = explode('-', $exploded);   
+                            $item_id = $itemParts[0];
+                            $item_amount = $itemParts[1]; 
+                            
+                            $option = Menu::where('id', $item_id)->first();  
+                            
+                            $total = $option->price * $item_amount;
+
+                            $message .= $item_amount." ".$option->name." ".$option->price."$"."\n"."precio unitario: ".$option->price."$"."\n"."subtotal: ".$option->price * $item_amount."$"."\n\n"; 
+
+                        }
+
+                        return response()->json(["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "Es esta su orden: "."\n".$message."\n"."Total a pagar: ".$total."$"]);
+
+                    }else{
+
+                        return response()->json(["success" => true, "statusOrder" =>4, "msg" => "Debe enviarnos las coordenadas por Google Maps"]);
+
+                    }
+                    
 
                 }
 
