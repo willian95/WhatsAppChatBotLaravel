@@ -220,7 +220,7 @@ class CustomerController extends Controller
                 $menuString .= $m->id."-".$m->name."\n".$m->description."\n\n";
             }
 
-            return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad,..."];
+            return ["success" => true, "statusOrder" => $previousOrder->status_id, "msg" => "¿Que tal ".$customer->name."? Tenemos estas opciones para ti: \n".$menuString."\n\n"."Para realizar su pedido debe hacerlo de la siguiente forma: número de opción-cantidad, número de opción - cantidad. Por ejemplo 1-2, 3-1, 4-1"];
 
         }catch(\Exception $e){
 
