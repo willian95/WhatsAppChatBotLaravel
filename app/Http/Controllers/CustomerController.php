@@ -190,8 +190,10 @@ class CustomerController extends Controller
                     $isAvailable = Menu::where('id', $item_id)->first();
                     if($isAvailable == null){
                         $flag = false;
-                        $noAvailableId = $item_id;
-                        break;
+                        if($noAvailableId == 0)
+                            $noAvailableId = $item_id;
+                        else
+                            $noAvailableId .= ",".$item_id;
                     }
 
                     Log::info('Pay attention to this: '.$itemParts[0]);
