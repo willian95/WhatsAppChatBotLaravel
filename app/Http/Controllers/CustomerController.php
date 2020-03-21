@@ -60,7 +60,7 @@ class CustomerController extends Controller
                         if(strpos($item_id, ",") > -1){
                             $message = "Las opciones ".$item_id." no existen, vuelva a verificar";
                         }else{
-                            $message = "La opción ".$item_id." no existe, vuelva a verificar"
+                            $message = "La opción ".$item_id." no existe, vuelva a verificar";
                         }
 
                         return response()->json(["success" => true, "statusOrder" => 2, "msg" => $message]);
